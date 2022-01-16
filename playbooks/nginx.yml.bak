@@ -1,0 +1,21 @@
+---
+- name: NGINX | Install'e'config NGINX server, mc first
+  hosts: nginx
+  become: true
+  vars:
+    nginx_port_to_listen: 8080
+  
+  tasks:
+    - name: Install mc first, just for fun!
+      dnf:
+        name: mc
+        state: present
+    
+    - name: Install EPEL repo package
+      dnf:
+        name epel-release
+        state: present
+      tags:
+        - epel-package
+        - packages
+       
