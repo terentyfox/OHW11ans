@@ -5,6 +5,10 @@ MACHINES = {
   :nginx => {
         :box_name => "generic/centos8",
         :ip_addr => '192.168.50.117'
+  },
+  :clnt => {
+        :box_name => "generic/centos8",
+        :ip_addr => '192.168.50.118'
   }
 }
 

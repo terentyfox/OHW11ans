@@ -2,15 +2,11 @@
 - name: NGINX | Install'e'config NGINX server, mc first
   hosts: nginx
   become: true
+
   vars:
     nginx_port_to_listen: 8080
   
   tasks:
-    - name: Install mc first, just for fun!
-      dnf:
-        name: mc
-        state: present
-    
     - name: Install EPEL repo package
       dnf:
         name: epel-release
@@ -29,24 +25,28 @@
         - nginx-package
         - packages
 
-    - name: Cofiguring NGINX by j2 template config file
+    - name: Cofiguring NGINX by j2 template config file & stopping firewall
       template:
         src: ../templates/nginx.conf.j2
         dest: /etc/nginx/nginx.conf
       notify:
-         - reload nginx  
+         - reload nginx
+         - stop firewalld 
       tags:
          - nginx-configuration
-
+      
   handlers:
     - name: restart nginx
       systemd:
         name: nginx
-        state: restart
+        state: restarted
 
     - name: reload nginx
       systemd:
         name: nginx
         state: reloaded
 
-
+    - name: stop firewalld
+      systemd:
+        name: firewalld
+        state: stopped
